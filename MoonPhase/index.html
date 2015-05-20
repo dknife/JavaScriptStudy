@@ -2,8 +2,24 @@
 	<head>
 		<title>Moon Phase</title>
 		<style type="text/css">canvas {border: 2px dotted blue;}</style>
+		<!-- Fragment Shader //-->
+		<script id="shader-fs" type="x-shader/x-fragment">
+		    #ifdef GL_ES
+		    precision highp float;
+		    #endif
+		    void main(void) {
+		        gl_FragColor = vec4(0.5,0.5,1.0, 1.0);
+		    }
+		</script>
+		<!-- Vertex Shader //-->
+		<script id="shader-vs" type="x-shader/x-vertex">
+			attribute vec3 aVertexPosition;
+			void main(void) {
+				gl_Position = vec4(aVertexPosition,1.0); 
+			}
+		</script>
 	</head>
-	<body onLoad="webGLMain()">
+	<body onLoad="glActions()">
 		<h1>Moon Phase Tonight</h1>
 		<h2>Calculated by Y.-M. Kang</h2>	
 		<script src="./moonPhase.js"></script>	
