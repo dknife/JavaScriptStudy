@@ -8,6 +8,6 @@ var diffDays = Math.round(Math.abs((today.getTime() - start.getTime())/(milliSec
 var phase = diffDays / 29.530588853;
 phase -= Math.floor(phase);
 
-document.write("Date (today):" + today.toString() + "<br><br>");
+document.write("오늘은" + today.getFullYear() +"년 "+(today.getMonth()+1)+"월 "+today.getDate()+"일 <br><br>");
 document.write("<b>"+diffDays+" days</b> since Jan. 31 1900<br><br>");
-document.write("MOON PHASE TONIGHT: <b>"+phase+"</b><br>");
+document.write("달님 상태는 <b>"+phase+"</b><br>");
