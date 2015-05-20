@@ -1,29 +1,39 @@
-var gl = null;
-var prog = null;
-
-var squareVertexBuffer = null; //The vertex buffer for the square
-var squareIndexBuffer = null; // The index buffer for the square
-var indices = []; //JavaScript array to store the indices of the square
-var vertices = []; //JavaScript array to store the vertices of the square
-
-var c_width = 0;
-var c_height = 0;
-
-
-function glActions() {
-	gl = getContext();
-	alert(gl.toString()+" obtained");
-	initShaderProgram();
-	initBuffers();
-	drawScene();
+/*function shaderProgram(gl, vs, fs) {
+	var prog = gl.createProgram();
+	var addshader = function(type, source) {
+		var s = gl.createShader((type == 'vertex') ?
+			gl.VERTEX_SHADER : gl.FRAGMENT_SHADER);
+		gl.shaderSource(s, source);
+		gl.compileShader(s);
+		if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+			throw "Could not compile "+type+
+				" shader:\n\n"+gl.getShaderInfoLog(s);
+		}
+		gl.attachShader(prog, s);
+	};
+	addshader('vertex', vs);
+	addshader('fragment', fs);
+	gl.linkProgram(prog);
+	if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+		throw "Could not link the shader program!";
+	}
+	return prog;
 }
+*/
 
+function attributeSetFloats(gl, prog, attr_name, rsize, arr) {
+	gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(arr),
+		gl.STATIC_DRAW);
+	var attr = gl.getAttribLocation(prog, attr_name);
+	gl.enableVertexAttribArray(attr);
+	gl.vertexAttribPointer(attr, rsize, gl.FLOAT, false, 0, 0);
+}
 
 function getContext() {
 	var canvas = document.getElementById("canvas");
 	if(canvas == null) {
-		alert("no canvas found");
-		return;
+		alert("no canvas found"); return;
 	}
 	var names = ["webgl",
 		"experimental-webgl",
@@ -38,31 +48,10 @@ function getContext() {
 		if(ctx) break;
 	}
 	if(ctx == null) { alert("webGL not found"); }
-	else {
-		return ctx;
-	}
+	else return ctx;
 }
 
-
-function initShaderProgram() {
-	var fgShader = getShader("shader-fs");
-	var vxShader = getShader("shader-vs");
-
-	prog = gl.createProgram();
-	gl.attachShader(prog, fgShader);
-	gl.attachShader(prog, vxShader);
-	
-	gl.linkProgram(prog);
-	if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
-		alert("Could not initialise shaders");
-	}
-	alert("now use this program");
-	gl.useProgram(prog);
-	
-	prog.vertexPosition = gl.getAttribLocation(prog, "aVertexPosition");
-}
-
-function getShader(id) {
+function getShader(gl, id) {
 	var script = document.getElementById(id);
 	if(!script) return null;
 	var str="";
@@ -91,39 +80,63 @@ function getShader(id) {
     return shader;
 }
 
-function initBuffers() {
-	vertices =  [
-	-0.5,0.5,0.0, 	//Vertex 0
-	-0.5,-0.5,0.0, 	//Vertex 1
-	0.5,-0.5,0.0, 	//Vertex 2
-	0.5,0.5,0.0,]; 	//Vertex 3
-
-	indices = [3,2,1,3,1,0];
+function initShaderProgram(gl) {
+	var fShader = getShader(gl, "shader-fs");
+	var vShader = getShader(gl, "shader-vs");
 	
-	//The following code snippet creates a vertex buffer and binds the vertices to it
-	squareVertexBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexBuffer);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-	gl.bindBuffer(gl.ARRAY_BUFFER, null);
 	
-	//The following code snippet creates a vertex buffer and binds the indices to it
-	squareIndexBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, squareIndexBuffer);
-	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+	var prog = gl.createProgram();
+	gl.attachShader(prog, fShader);
+	gl.attachShader(prog, vShader);
+	
+	gl.linkProgram(prog);
+	if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+		alert("Could not initialise shaders");
+	}
+	alert("now use this program");
+	gl.useProgram(prog);	
+	return prog;
 }
 
-function drawScene(){
-	gl.clearColor(0.0, 0.0, 1.0, 1.0);
-	gl.enable(gl.DEPTH_TEST);
-
-	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-	gl.viewport(0,0,c_width, c_height);
-	
-	gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexBuffer);
-	gl.vertexAttribPointer(prog.aVertexPosition, 3, gl.FLOAT, false, 0, 0);
-	gl.enableVertexAttribArray(prog.vertexPosition);
-	
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, squareIndexBuffer);
-	gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT,0);
+function createVertexArray() {
+	var arr = [0,0,0];
+	for(var i=0;i<=100;i++) {
+		var x,y,z;
+		x = Math.sin(3.14159*2*i/100);
+		arr.push(x);
+		y = Math.cos(3.14159*2*i/100);
+		arr.push(y);
+		z = 0;
+		arr.push(z);
+		
+	}
+	return arr;
 }
+
+function draw() {
+	try {
+		var gl = getContext();
+		if (!gl) { throw "x"; }
+	} catch (err) {
+		throw "Your web browser does not support WebGL!";
+	}
+	gl.clearColor(0.0, 0.0, 0.0, 1);
+	gl.clear(gl.COLOR_BUFFER_BIT);
+
+	var prog = initShaderProgram(gl);
+
+	var arr = createVertexArray();
+	
+	attributeSetFloats(gl, prog, "pos", 3, arr);
+	
+	gl.drawArrays(gl.TRIANGLE_FAN, 0, 102);
+}
+
+function init() {
+	try {
+		draw();
+	} catch (e) {
+		alert("Error: "+e);
+	}
+}
+setTimeout(init, 100);
