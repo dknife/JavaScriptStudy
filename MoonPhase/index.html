@@ -9,7 +9,7 @@
 		    precision highp float;
 		    #endif
 			void main() {
-				gl_FragColor = vec4(0.5, 0.5, 1.0, 1.0);
+				gl_FragColor = vec4(0.8, 0.8, 1.0, 1.0);
 			}
 		</script>
 		<!-- Vertex Shader //-->
@@ -19,12 +19,14 @@
 				gl_Position = vec4(pos, 2.0);
 			}
 		</script>
+		<script src="./moonPhaseCalculator.js"></script>
 	</head>
 	<body>
-		<h1>오늘 달님의 모양은…</h1>
+		<h1>오늘 달님의 모양은…</h1>		
 		<script src="./moonPhase.js"></script>	
 		<script src="./webGL.js"></script>
 		<canvas id="canvas" width=300 height=300>Canvas Not Supported</canvas>	
+		<br>JavaScript + WebGL written by Young-Min
 	</body>
 	
 </html>

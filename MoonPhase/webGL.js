@@ -1,30 +1,6 @@
-/*function shaderProgram(gl, vs, fs) {
-	var prog = gl.createProgram();
-	var addshader = function(type, source) {
-		var s = gl.createShader((type == 'vertex') ?
-			gl.VERTEX_SHADER : gl.FRAGMENT_SHADER);
-		gl.shaderSource(s, source);
-		gl.compileShader(s);
-		if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
-			throw "Could not compile "+type+
-				" shader:\n\n"+gl.getShaderInfoLog(s);
-		}
-		gl.attachShader(prog, s);
-	};
-	addshader('vertex', vs);
-	addshader('fragment', fs);
-	gl.linkProgram(prog);
-	if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
-		throw "Could not link the shader program!";
-	}
-	return prog;
-}
-*/
-
 function attributeSetFloats(gl, prog, attr_name, rsize, arr) {
 	gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(arr),
-		gl.STATIC_DRAW);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(arr), gl.STATIC_DRAW);
 	var attr = gl.getAttribLocation(prog, attr_name);
 	gl.enableVertexAttribArray(attr);
 	gl.vertexAttribPointer(attr, rsize, gl.FLOAT, false, 0, 0);
@@ -93,23 +69,41 @@ function initShaderProgram(gl) {
 	if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
 		alert("Could not initialise shaders");
 	}
-	alert("now use this program");
 	gl.useProgram(prog);	
 	return prog;
 }
 
-function createVertexArray() {
-	var arr = [0,0,0];
-	for(var i=0;i<=100;i++) {
-		var x,y,z;
-		x = Math.sin(3.14159*2*i/100);
-		arr.push(x);
-		y = Math.cos(3.14159*2*i/100);
+function createVertexArray(phase) {
+	var arr = [0,1,0];
+	
+	for(var i=0;i<=50;i++) {
+		var xR,y,z;
+		var xL;
+		
+		if(phase<0.5) xR = Math.sin(3.14159*2*i/100);
+		else {
+			var right = Math.sin(3.14159*2*i/100);
+			var left = -right;
+			var w = (phase-0.5)/0.5;
+			xR = w*left + (1-w)*right;
+		}
+		arr.push(xR);
+		y  = Math.cos(3.14159*2*i/100);
 		arr.push(y);
-		z = 0;
+		z  = 0;
 		arr.push(z);
 		
+		if(phase>0.5) xL = -Math.sin(3.14159*2*i/100);
+		else {
+			var right  = Math.sin(3.14159*2*i/100);
+			var left = -right;
+			xL = (phase/0.5)*left + (1-phase/0.5)*right 
+		}
+		arr.push(xL);
+		arr.push(y);
+		arr.push(z);
 	}
+	
 	return arr;
 }
 
@@ -125,18 +119,15 @@ function draw() {
 
 	var prog = initShaderProgram(gl);
 
-	var arr = createVertexArray();
+	//var phase = moonPhase();
+	var arr = createVertexArray(phase);
 	
 	attributeSetFloats(gl, prog, "pos", 3, arr);
 	
-	gl.drawArrays(gl.TRIANGLE_FAN, 0, 102);
+	gl.drawArrays(gl.TRIANGLE_STRIP, 0, 102);
 }
 
 function init() {
-	try {
-		draw();
-	} catch (e) {
-		alert("Error: "+e);
-	}
+	draw();
 }
 setTimeout(init, 100);
