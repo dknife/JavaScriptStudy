@@ -119,15 +119,16 @@ function draw() {
 
 	var prog = initShaderProgram(gl);
 
-	//var phase = moonPhase();
+	var phase = moonPhase();
 	var arr = createVertexArray(phase);
 	
 	attributeSetFloats(gl, prog, "pos", 3, arr);
 	
-	gl.drawArrays(gl.TRIANGLE_STRIP, 0, 102);
+	gl.drawArrays(gl.TRIANGLE_STRIP, 0, 102);	
 }
 
 function init() {
 	draw();
 }
+
 setTimeout(init, 100);

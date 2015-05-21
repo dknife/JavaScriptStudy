@@ -5,7 +5,7 @@ function moonPhase() {
 	
 	var milliSecPerDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
 	
-	var diffDays = Math.round(Math.abs((today.getTime() - start.getTime())/(milliSecPerDay)));
+	var diffDays = Math.abs((today.getTime() - start.getTime())/(milliSecPerDay));
 	var phase = diffDays / 29.530588853;
 	phase -= Math.floor(phase);
 	return phase;
