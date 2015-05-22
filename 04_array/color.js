@@ -8,8 +8,8 @@ colors = ["red",
 		"yellow"];
 
 var today = new Date();
-var i = today.getMilliseconds();
-i %=7;
+var i = Math.floor(Math.random()*7);
+
 var el = document.getElementById('randomColor');
 el.textContent = colors[i];
 el.style.color = colors[i];
