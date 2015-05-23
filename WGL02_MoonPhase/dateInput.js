@@ -1,12 +1,12 @@
 var today = new Date();
 
-document.write("<br><label for='year'>YEAR</label>");
-document.write("<input type='number' id='year' value='"+(today.getYear()+1900)+"'/>");
-document.write("<br><label for='month'>MONTH</label>");
-document.write("<input type='number' id='month' value='"+(today.getMonth()+1)+"'/>");
-document.write("<br><label for='date'>DAY</label>");
+document.write("<li><label for='year'>YEAR</label>");
+document.write("<input type='number' id='year' value='"+(today.getYear()+1900)+"'/></li>");
+document.write("<li><label for='month'>MONTH</label>");
+document.write("<input type='number' id='month' value='"+(today.getMonth()+1)+"'/></li>");
+document.write("<li><label for='date'>DAY</label>");
 document.write("<input type='number' id='date' value='"+(today.getDate())+"'/>");
-document.write("<input type='submit' id='compute' value='이 날의 달님 계산!' />")
+document.write("<input type='submit' id='compute' value='이 날 20:00시의 달님 계산!' /></li>")
 
 function checkYear() {
 	if(this.value<1900) {

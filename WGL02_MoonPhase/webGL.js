@@ -109,6 +109,7 @@ function createVertexArray(phase) {
 }
 
 function draw(canvasName, date) {
+	
 	try {
 		var gl = getContext(canvasName);
 		if (!gl) { throw "x"; }
@@ -120,13 +121,11 @@ function draw(canvasName, date) {
 
 	var prog = initShaderProgram(gl);
 
-	var phase = moonPhase2(date);
+	var phase = moonPhase(date);
+	
 	var arr = createVertexArray(phase);
 	
 	attributeSetFloats(gl, prog, "pos", 3, arr);
 	
 	gl.drawArrays(gl.TRIANGLE_STRIP, 0, 102);	
 }
-
-
-setTimeout(draw, 100, "canvas", today);
