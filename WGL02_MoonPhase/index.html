@@ -20,13 +20,23 @@
 			}
 		</script>
 		<script src="./moonPhaseCalculator.js"></script>
+		<link rel="stylesheet" href="./myCSS.css">
 	</head>
 	<body>
+		 <div id="page">
 		<h1>오늘 달님의 모양은…</h1>		
 		<script src="./textInfoDisplay.js"></script>	
 		<script src="./webGL.js"></script>
-		<canvas id="canvas" width=300 height=300>Canvas Not Supported</canvas>	
-		<br>JavaScript + WebGL written by Young-Min
+		<canvas id="canvas" width=475 height=475>Canvas Not Supported</canvas>	
+		<h2> 오늘의 달님 모양</h2>
+		<h2> </h2>
+		<h2> 임의의 날짜를 입력하세요</h2>
+		<script src="./dateInput.js"></script>
+		<ul><li id="feedback">Message: </li></ul>
+		<canvas id="canvas2" width=475 height=475>Canvas Not Supported</canvas>	
+		</div>
+		 
+		 
 	</body>
 	
 </html>

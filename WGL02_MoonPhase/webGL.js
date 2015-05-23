@@ -127,8 +127,5 @@ function draw() {
 	gl.drawArrays(gl.TRIANGLE_STRIP, 0, 102);	
 }
 
-function init() {
-	draw();
-}
 
-setTimeout(init, 100);
+setTimeout(draw, 100);
