@@ -19,16 +19,14 @@ function moonPhase() {
 	return phase;
 }
 
-function moonPhase2(year, month, date) {
-	var today = new Date();
+function moonPhase2(date) {
 	var start = new Date();
 	
-	today.setFullYear(year, month, date);
 	start.setFullYear(1900, 0, 31);
 	
 	var milliSecPerDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
 	
-	var todayMill = today.getTime();
+	var todayMill = date.getTime();
 	var startMill = start.getTime();
 	
 	var diffDays = Math.abs((todayMill-startMill)/(milliSecPerDay));

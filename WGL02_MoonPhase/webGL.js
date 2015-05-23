@@ -6,9 +6,10 @@ function attributeSetFloats(gl, prog, attr_name, rsize, arr) {
 	gl.vertexAttribPointer(attr, rsize, gl.FLOAT, false, 0, 0);
 }
 
-function getContext() {
-	var canvas = document.getElementById("canvas");
+function getContext(canvasName) {
+	var canvas = document.getElementById(canvasName);
 	if(canvas == null) {
+		alert(canvasName);
 		alert("no canvas found"); return;
 	}
 	var names = ["webgl",
@@ -107,9 +108,9 @@ function createVertexArray(phase) {
 	return arr;
 }
 
-function draw() {
+function draw(canvasName, date) {
 	try {
-		var gl = getContext();
+		var gl = getContext(canvasName);
 		if (!gl) { throw "x"; }
 	} catch (err) {
 		throw "Your web browser does not support WebGL!";
@@ -119,7 +120,7 @@ function draw() {
 
 	var prog = initShaderProgram(gl);
 
-	// phase is declared and set in textInfoDisplay.js
+	var phase = moonPhase2(date);
 	var arr = createVertexArray(phase);
 	
 	attributeSetFloats(gl, prog, "pos", 3, arr);
@@ -128,4 +129,4 @@ function draw() {
 }
 
 
-setTimeout(draw, 100);
+setTimeout(draw, 100, "canvas", today);
