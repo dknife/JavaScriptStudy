@@ -19,7 +19,7 @@ function moonPhase(date) {
 	var startMill = start.getTime()+ 10*60*60*1000 + 22*60*1000 + 38*1000; //
 	var diffDays = Math.abs((todayMill-startMill)/(milliSecPerDay));
 	
-	var phase = diffDays / 29.530588853
+	var phase = diffDays / 29.530588853;
 	phase -= Math.floor(phase);
 	
 	if( typeof date != 'undefined') {
